@@ -1,6 +1,6 @@
 from flask import Flask, Response
 from flask import render_template, redirect, url_for, request, abort
-
+import json
 import gevent
 from gevent import monkey; monkey.patch_all()
 
@@ -15,7 +15,7 @@ from redis import Redis
 app = Flask(__name__, static_folder='dependencies')
 app.config['DEBUG'] = True
 
-app.config['REDIS_HOST'] = 'localhost'
+app.config['REDIS_HOST'] = '10.0.0.4'
 app.config['REDIS_PORT'] = 6379
 app.config['REDIS_DB'] = 0
 app.config['REDIS_PASS'] = None
@@ -50,6 +50,18 @@ class RedisStream(BaseNamespace, BroadcastMixin):
 def get_function_data(minion, jid):
     data = redis.get('{0}:{1}'.format(minion, jid))
     return Response(response=data, status=200, mimetype="application/json")
+
+@app.route('/m')
+def m():
+    data = redis.sort('minions', alpha=True)
+    print data
+    #pings = list()
+    #pings = [ a for a in data ]
+    return json.dumps(data)
+    return data
+    #return Response(response=data, status=200, mimetype="application/json")
+
+
 
 @app.route('/stats')
 def stats():

@@ -30,7 +30,7 @@
         {% endfor %}
 
         renderjson.set_icons('+', '-');
-        renderjson.set_show_to_level(1);
+        renderjson.set_show_to_level(2);
         function generate_content(json, time){
             $('#minion').html(json.id);
             $('#function').html(json.fun);
@@ -46,13 +46,23 @@
             if (json.success) {
                 $('#success').removeClass('danger');
                 $('#success').addClass('success');
-                $('#success').html("<span class='glyphicon glyphicon-ok'></span>");
+                $('#success').html("<span class='label label-success'>True</span>");
             } else {
                 $('#success').removeClass('success');
                 $('#success').addClass('danger');
-                $('#success').html("<span class='glyphicon glyphicon-remove'></span>");
+                $('#success').html("<span class='label label-danger'>False</span>");
             }
-            $('#return-code').html(json.retcode);
+            //$('#return-code').html(json.retcode);
+            if (json.retcode === 0) {
+                $('#return-code').removeClass('danger');
+                $('#return-code').addClass('success');
+                $('#return-code').html("<span class=\"label label-success\">" + json.retcode + "</span>");
+            } else {
+                $('#return-code').removeClass('success');
+                $('#return-code').addClass('danger');
+                $('#return-code').html("<span class=\"label label-danger\">" + json.retcode + "</span>");
+            }
+
 
             $('#content > table').removeClass('hidden');
             $('#content > div').removeClass('hidden');

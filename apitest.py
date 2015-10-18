@@ -23,7 +23,6 @@ debug = False
 if debug:
     # request logger
     httplib.HTTPConnection.debuglevel = 1
-
     logging.basicConfig()
     logging.getLogger().setLevel(logging.DEBUG)
     requests_log = logging.getLogger("requests.packages.urllib3")
@@ -37,12 +36,22 @@ class SaltApiManager(object):
     '''
     SaltApiManager abstracts an saltapi request
     '''
-    def __init__(self, user, password, SALT_API='http://localhost', PORT='8000'):
+    def __init__(self,
+                 user,
+                 password,
+                 SALT_API='http://localhost',
+                 PORT='8000'):
+        """
+        :param user:
+        :param password:
+        :param SALT_API:
+        :param PORT:
+        :return:
+        """
         self.headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-        #'Content-Type': 'application/json'
         self._SALT_API = '{0}:{1}'.format(SALT_API, PORT)
         self.username = user
         self.password = password
@@ -79,7 +88,6 @@ class SaltApiManager(object):
             'password': self.password
         }
         """
-        #print(json.dumps(data))
         self.r = requests.post(self._SALT_API + '/logout',
                                data=json.dumps(self.data),
                                headers=self.headers
@@ -95,13 +103,11 @@ class SaltApiManager(object):
 
     def run(self, tgt, fun='test.ping', arg=None):
         """
-        curl -si http://10.0.0.4:8000 \
-        -H "Accept: application/x-yaml" \
-        -H "X-Auth-Token: 09e15bfd2abd70312367d6d458a380ed2198c9c9" \
-        -d client=local \
-        -d tgt='*' \
-        -d fun='test.ping' \
 
+        :param tgt:
+        :param fun:
+        :param arg:
+        :return:
         """
         self.data = {
             'tgt': tgt,
@@ -113,9 +119,8 @@ class SaltApiManager(object):
 
         if debug:
             print(self.data)
-
-            #print(json.dumps(data))
             print(self.headers)
+
         self.r = requests.post(self._SALT_API,
                           data=json.dumps(self.data),
                           headers=self.headers
@@ -143,18 +148,13 @@ class SaltApiManager(object):
             'tgt':'*',
             'match': ''
         }
-        #print(json.dumps(data))
+
         self.r = requests.post(self._SALT_API + '/',
                           data=json.dumps(self.data),
                           headers=self.headers
                           )
-        #print(r.text)
-        print(self.r.status_code)
+
         if self.r.status_code == 200:
-            #print(r.text)
             for key in self.r.json()['return'][0]['data']['return']['minions']:
                 print(key)
-            #return r.json()['return'][0]
-
-#run()
 

@@ -158,30 +158,3 @@ class SaltApiManager(object):
 
 #run()
 
-if __name__ == '__main__':
-    saltrun = SaltApiManager(user = 'guo',
-                          password = 'viper1',
-                          SALT_API = 'http://10.0.0.4',
-                          PORT = '8000'
-                          )
-    saltrun.listkeys()
-    saltrun.run(tgt='*', fun= 'user.info', arg='guo')
-    saltrun.run(tgt='*', fun= 'status.loadavg')
-    saltrun.logout()
-    #saltrun.run(tgt='*', fun= 'cmd.run', arg='ls')
-
-"""
-payload = {'key1': 'value1', 'key2': ['value2', 'value3']}
->>> r = requests.get("http://httpbin.org/get", params=payload)
-"""
-
-
-"""
-% curl -si https://localhost:8000 \
-        -H "Accept: application/x-yaml" \
-        -H "X-Auth-Token: d40d1e1e" \
-        -d client=local \
-        -d tgt='*' \
-        -d fun='test.ping' \
-        -d arg
-"""
